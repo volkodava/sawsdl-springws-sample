@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns:sch0="http://com/samples/webservices/purchaseorderservice" 
+    xmlns:sch1="http://purchaseorder.webservices.samples.com" 
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:tns="http://com/samples/webservices/purchaseorderservice" 
+    targetNamespace="http://com/samples/webservices/purchaseorderservice"
+    xmlns:sawsdl="http://www.w3.org/2007/01/sawsdl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    
+    <wsdl:types>
+        <xsd:schema 
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            xmlns="http://com/samples/webservices/purchaseorderservice" 
+            targetNamespace="http://com/samples/webservices/purchaseorderservice"
+            xmlns:sawsdl="http://www.w3.org/2007/01/sawsdl#" 
+            xmlns:purchaseOrder="http://purchaseorder.webservices.samples.com" 
+            elementFormDefault="qualified" 
+            attributeFormDefault="unqualified">
+    
+            <xsd:import namespace="http://purchaseorder.webservices.samples.com"/>
+            <xsd:element name="PurchaseOrderRequest" 
+                         sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#PurchaseOrderRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="PurchaseOrderId" type="purchaseOrder:PurchaseOrderId" />
+                    </xsd:sequence>
+                </xsd:complexType>   
+            </xsd:element>
+            <xsd:element name="PurchaseOrderResponse" 
+                         sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#PurchaseOrderConfirmation">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="PurchaseOrder" type="purchaseOrder:PurchaseOrder"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+        
+        <xsd:schema 
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            xmlns="http://purchaseorder.webservices.samples.com" 
+            targetNamespace="http://purchaseorder.webservices.samples.com" 
+            xmlns:sawsdl="http://www.w3.org/2007/01/sawsdl#" 
+            elementFormDefault="qualified" 
+            attributeFormDefault="unqualified">
+    
+            <xsd:complexType name="PurchaseOrder">
+                <xsd:sequence>
+                    <xsd:element name="purchaseOrderId" type="PurchaseOrderId"/>
+                    <xsd:element name="orderQuantity" type="xsd:int" 
+                                 sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#OrderQuantity"/>
+                    <xsd:element name="productCost" type="xsd:int" 
+                                 sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#UnitPrice"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="PurchaseOrderId">
+                <xsd:sequence>
+                    <xsd:element name="globalProductIdentifier" type="xsd:string" nillable="true" 
+                                 sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#GlobalProductIdentifier"/>
+                    <xsd:element name="globalVendorIdentifier" type="xsd:string" nillable="true" 
+                                 sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#GlobalBusinessIdentifier"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </wsdl:types>
+    
+    <wsdl:message name="PurchaseOrderRequest">
+        <wsdl:part element="tns:PurchaseOrderRequest" name="PurchaseOrderRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="PurchaseOrderResponse">
+        <wsdl:part element="tns:PurchaseOrderResponse" name="PurchaseOrderResponse">
+        </wsdl:part>
+    </wsdl:message>
+    
+    <wsdl:portType name="PurchaseOrderService">
+        <wsdl:operation name="PurchaseOrder">
+            <wsdl:input message="tns:PurchaseOrderRequest" name="PurchaseOrderRequest">
+            </wsdl:input>
+            <wsdl:output message="tns:PurchaseOrderResponse" name="PurchaseOrderResponse">
+            </wsdl:output>
+            <sawsdl:attrExtensions
+                sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#RequestPurchaseOrder"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <wsdl:binding name="PurchaseOrderServiceSoap11" type="tns:PurchaseOrderService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="PurchaseOrder">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="PurchaseOrderRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="PurchaseOrderResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:service name="PurchaseOrderServices">
+        <wsdl:port binding="tns:PurchaseOrderServiceSoap11" name="PurchaseOrderServiceSoap11">
+            <soap:address location="/endpoints"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

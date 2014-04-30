@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:sws="http://www.springframework.org/schema/web-services"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+							http://www.springframework.org/schema/web-services
+							http://www.springframework.org/schema/web-services/web-services-2.0.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.samples.services" />
+    <sws:annotation-driven />
+    
+    <bean id="jaxb2Marshaller"
+          class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPaths">
+            <list>
+                <value>com.samples.webservices.purchaseorder</value>
+                <value>com.samples.webservices.purchaseorderservice</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory"/>
+
+    <bean class="org.springframework.ws.transport.http.WebServiceMessageReceiverHandlerAdapter">
+        <property name="messageFactory" ref="messageFactory" />
+    </bean>
+
+    <bean class="org.springframework.ws.transport.http.WsdlDefinitionHandlerAdapter"/>
+
+    <bean id="messageDispatcher" class="org.springframework.ws.soap.server.SoapMessageDispatcher"/>
+
+    <bean id="PurchaseOrderService" class="org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition">
+        <property name="wsdl" value="classpath:/wsdl/PurchaseOrderService.wsdl"/>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <props>
+                <prop key="*.wsdl">PurchaseOrderService</prop>
+            </props>
+        </property>
+        <property name="defaultHandler" ref="messageDispatcher"/>
+    </bean>
+
+    <bean id="endpointMapping" class="org.springframework.ws.server.endpoint.mapping.PayloadRootAnnotationMethodEndpointMapping"/>
+
+    <bean id="messageReceiver" class="org.springframework.ws.soap.server.SoapMessageDispatcher">
+        <property name="endpointMappings" ref="endpointMapping"/>
+    </bean>
+
+    <!--    <bean id="PurchaseOrderService" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition" lazy-init="true">
+        <property name="schemaCollection">
+            <bean class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
+                <property name="inline" value="true" />
+                <property name="xsds">
+                    <list>
+                        <value>schemas/PurchaseOrderServiceOperations.xsd</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="portTypeName" value="PurchaseOrderService"/>
+        <property name="serviceName" value="PurchaseOrderServices" />
+        <property name="locationUri" value="/endpoints"/>
+    </bean>-->
+</beans>

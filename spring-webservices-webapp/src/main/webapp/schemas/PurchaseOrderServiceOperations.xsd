@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns="http://com/samples/webservices/purchaseorderservice" 
+    targetNamespace="http://com/samples/webservices/purchaseorderservice"
+    xmlns:sawsdl="http://www.w3.org/2007/01/sawsdl#" 
+    xmlns:purchaseOrder="http://purchaseorder.webservices.samples.com" 
+    elementFormDefault="qualified" 
+    attributeFormDefault="unqualified">
+    
+    <xsd:import namespace="http://purchaseorder.webservices.samples.com" schemaLocation="PurchaseOrder.xsd"/>
+    <xsd:element name="PurchaseOrderRequest" 
+                 sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#PurchaseOrderRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="PurchaseOrderId" type="purchaseOrder:PurchaseOrderId" />
+            </xsd:sequence>
+        </xsd:complexType>   
+    </xsd:element>
+    <xsd:element name="PurchaseOrderResponse" 
+                 sawsdl:modelReference="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/ontologies/rosetta.owl#PurchaseOrderConfirmation">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="PurchaseOrder" type="purchaseOrder:PurchaseOrder"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
